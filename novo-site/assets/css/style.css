@@ -1,0 +1,1454 @@
+@import url('../fonts/fonts.css');
+
+/* ==========================================================================
+   GLAUCIO LELIS — Sistema visual
+   Direção: claro, limpo, editorial. Paleta definida pelo cliente no onboarding
+   (azul royal, azul marinho, cinza chumbo) + o ouro do monograma GL.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. TOKENS
+   -------------------------------------------------------------------------- */
+:root {
+  /* Neutros com viés azul — papel frio, nunca creme */
+  --paper:        #F5F7FA;
+  --paper-deep:   #E9EEF5;
+  --surface:      #FFFFFF;
+
+  /* Tinta */
+  --ink:          #0E2144;   /* azul-marinho quase preto — títulos */
+  --navy:         #16325C;   /* azul marinho — faixas profundas */
+  --body:         #48535F;   /* cinza chumbo — corpo de texto */
+  --muted:        #78849A;
+
+  /* Acento único */
+  --royal:        #2B5FB0;   /* azul royal — CTA e links */
+  --royal-deep:   #1F4A8F;
+  --royal-wash:   #EDF3FC;
+
+  /* Metal do monograma — só filete e detalhe, nunca preenchimento */
+  --gold:         #A98849;
+  --gold-soft:    #D8C79C;
+  --gold-wash:    #F6F1E6;
+
+  --line:         #DCE3EC;
+  --line-soft:    #E9EEF4;
+
+  /* Sombras — difusas e frias, sem brilho */
+  --lift-1: 0 1px 2px rgba(14,33,68,.05), 0 2px 8px -4px rgba(14,33,68,.08);
+  --lift-2: 0 1px 2px rgba(14,33,68,.05), 0 18px 40px -20px rgba(14,33,68,.22);
+  --lift-3: 0 2px 4px rgba(14,33,68,.06), 0 34px 70px -28px rgba(14,33,68,.34);
+
+  /* Tipografia */
+  --display: 'Bodoni Moda', 'Times New Roman', serif;
+  --sans: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* A Bodoni Moda é variável e tem eixo de TAMANHO ÓPTICO (opsz 6–96).
+     No automático, quanto maior o texto, mais o navegador afina as hastes —
+     num título de 5rem ele vai para ~90 e as linhas finas quase somem.
+     Travamos em 16 (desenho pensado para texto) para baixar o contraste e
+     engrossar a letra inteira, mantendo o caráter da fonte.
+     Ajuste aqui para calibrar o site todo de uma vez:
+       12 = mais encorpado   ·   16 = atual   ·   36+ = fino e contrastado  */
+  --display-opsz: 16;
+  --peso-display: 700;   /* títulos grandes (h1, h2) */
+  --peso-display-m: 600; /* títulos médios e destaques */
+
+  /* Teto em 4.5rem: acima disso "prosperidade" não cabe na coluna do hero
+     e o título quebra deixando o "A" órfão na primeira linha. */
+  --fs-display-xl: clamp(2.5rem, 5.4vw, 4.5rem);
+  --fs-display-l:  clamp(2rem, 4.1vw, 3.15rem);
+  --fs-display-m:  clamp(1.45rem, 2.5vw, 1.95rem);
+  --fs-lead:       clamp(1.0625rem, 1.35vw, 1.25rem);
+  --fs-body:       1.0625rem;
+  --fs-small:      0.9375rem;
+  --fs-label:      0.6875rem;
+
+  /* Ritmo */
+  --shell: 1200px;
+  --measure: 64ch;
+  --pad-x: clamp(1.25rem, 5vw, 3.5rem);
+  --sect-y: clamp(4.5rem, 9vw, 8.5rem);
+
+  color-scheme: light;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   DECISÃO DE PROJETO: o site é claro, sempre.
+   Não existe bloco `prefers-color-scheme: dark` de propósito — o site
+   anterior era escuro e foi justamente isso que derrubou a performance.
+   Se o visitante estiver com o sistema em modo escuro, ele continua vendo
+   a versão clara. O bloco abaixo só entra se alguém pedir o tema escuro
+   explicitamente (data-theme), nunca por preferência do sistema.
+   ──────────────────────────────────────────────────────────────────────── */
+:root[data-theme="dark"] {
+  --paper:      #0B1424;
+  --paper-deep: #101C30;
+  --surface:    #111E33;
+  --ink:        #EAF0F8;
+  --navy:       #C3D5F0;
+  --body:       #AFBCCC;
+  --muted:      #7C8CA3;
+  --royal:      #7BA7E8;
+  --royal-deep: #9CBEF0;
+  --royal-wash: #15263F;
+  --gold:       #C9A961;
+  --gold-soft:  #6E5C36;
+  --gold-wash:  #1A2436;
+  --line:       #22344F;
+  --line-soft:  #1B2B42;
+  --lift-1: 0 1px 2px rgba(0,0,0,.3), 0 2px 8px -4px rgba(0,0,0,.4);
+  --lift-2: 0 1px 2px rgba(0,0,0,.3), 0 18px 40px -20px rgba(0,0,0,.6);
+  --lift-3: 0 2px 4px rgba(0,0,0,.35), 0 34px 70px -28px rgba(0,0,0,.7);
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --paper:      #F5F7FA;
+  --paper-deep: #E9EEF5;
+  --surface:    #FFFFFF;
+  --ink:        #0E2144;
+  --navy:       #16325C;
+  --body:       #48535F;
+  --muted:      #78849A;
+  --royal:      #2B5FB0;
+  --royal-deep: #1F4A8F;
+  --royal-wash: #EDF3FC;
+  --gold:       #A98849;
+  --gold-soft:  #D8C79C;
+  --gold-wash:  #F6F1E6;
+  --line:       #DCE3EC;
+  --line-soft:  #E9EEF4;
+  --lift-1: 0 1px 2px rgba(14,33,68,.05), 0 2px 8px -4px rgba(14,33,68,.08);
+  --lift-2: 0 1px 2px rgba(14,33,68,.05), 0 18px 40px -20px rgba(14,33,68,.22);
+  --lift-3: 0 2px 4px rgba(14,33,68,.06), 0 34px 70px -28px rgba(14,33,68,.34);
+  color-scheme: light;
+}
+
+/* --------------------------------------------------------------------------
+   2. BASE
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--body);
+  font-family: var(--sans);
+  font-size: var(--fs-body);
+  line-height: 1.72;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--royal); text-decoration: none; }
+a:hover { color: var(--royal-deep); }
+
+:focus-visible {
+  outline: 2px solid var(--royal);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection { background: var(--royal); color: #fff; }
+
+/* --------------------------------------------------------------------------
+   3. TIPOGRAFIA
+   -------------------------------------------------------------------------- */
+/* Um lugar só define o tamanho óptico de tudo que usa a Bodoni.
+   Sem isto, cada título recebe um valor diferente do navegador e o site
+   perde uniformidade de cor tipográfica. */
+h1, h2, h3, h4,
+.roman, .brand__name, .plate__cap b, .fact__n, .pillar__t,
+.phase__t, .book__t, .book__price, .author__q, .author__sig,
+.quote blockquote {
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' var(--display-opsz);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  color: var(--ink);
+  font-weight: var(--peso-display);
+  line-height: 1.08;
+  letter-spacing: -0.012em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--fs-display-xl); }
+h2 { font-size: var(--fs-display-l); }
+h3 { font-size: var(--fs-display-m); line-height: 1.16; font-weight: var(--peso-display-m); }
+h4 { font-weight: var(--peso-display-m); }
+
+p { margin: 0; }
+
+.lead {
+  font-size: var(--fs-lead);
+  line-height: 1.68;
+  color: var(--body);
+  max-width: 54ch;
+}
+
+.measure { max-width: var(--measure); }
+
+/* Etiqueta versalete — o único uso de caixa-alta espaçada */
+.label {
+  font-family: var(--sans);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  margin: 0;
+}
+
+.label--gold { color: var(--gold); }
+.label--royal { color: var(--royal); }
+
+/* Filete curto que acompanha a etiqueta */
+.label::before {
+  content: "";
+  width: 1.75rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.55;
+  flex: none;
+}
+
+.label--bare::before { display: none; }
+
+/* Numeral romano dos capítulos — sequência real do livro */
+.roman {
+  font-family: var(--display);
+  font-size: 0.8125rem;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  font-weight: var(--peso-display-m);
+}
+
+/* --------------------------------------------------------------------------
+   4. LAYOUT
+   -------------------------------------------------------------------------- */
+.shell {
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: var(--pad-x);
+}
+
+.section { padding-block: var(--sect-y); }
+.section--tight { padding-block: clamp(3rem, 5.5vw, 5rem); }
+.section--paper { background: var(--paper-deep); }
+.section--surface { background: var(--surface); }
+
+.stack { display: flex; flex-direction: column; }
+.stack-3 { gap: 0.75rem; }
+.stack-4 { gap: 1rem; }
+.stack-6 { gap: 1.5rem; }
+.stack-8 { gap: 2rem; }
+.stack-12 { gap: 3rem; }
+
+/* Especificidade ZERO de propósito: qualquer componente que precise do próprio
+   padding (.phases, .book__meta) vence sem precisar de !important. */
+:where(.ul-reset) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rule {
+  height: 1px;
+  background: var(--line);
+  border: 0;
+  margin: 0;
+}
+
+.rule--gold {
+  background: linear-gradient(90deg, var(--gold-soft), transparent 72%);
+}
+
+/* --------------------------------------------------------------------------
+   5. BOTÕES
+   -------------------------------------------------------------------------- */
+.btn {
+  --btn-bg: var(--royal);
+  --btn-fg: #fff;
+  --btn-bd: var(--royal);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 0.95rem 1.85rem;
+  border: 1px solid var(--btn-bd);
+  border-radius: 2px;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  cursor: pointer;
+  transition: background .25s ease, color .25s ease,
+              border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+  text-align: center;
+}
+
+.btn:hover {
+  background: var(--royal-deep);
+  border-color: var(--royal-deep);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: var(--lift-2);
+}
+
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--ink);
+  --btn-bd: var(--line);
+}
+
+.btn--ghost:hover {
+  background: transparent;
+  color: var(--royal);
+  border-color: var(--royal);
+  box-shadow: none;
+}
+
+.btn--wide { width: 100%; }
+
+.btn--onNavy {
+  --btn-bg: #fff;
+  --btn-fg: var(--ink);
+  --btn-bd: #fff;
+}
+
+.btn--onNavy:hover {
+  background: var(--gold-wash);
+  border-color: var(--gold-wash);
+  color: var(--ink);
+}
+
+.btn-row { display: flex; flex-wrap: wrap; gap: 0.85rem; }
+
+/* Seta que desliza no hover */
+.btn .arw { transition: transform .25s ease; }
+.btn:hover .arw { transform: translateX(3px); }
+
+/* --------------------------------------------------------------------------
+   6. CABEÇALHO
+   -------------------------------------------------------------------------- */
+.hdr {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s ease, background .3s ease;
+}
+
+.hdr.is-stuck {
+  border-bottom-color: var(--line);
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+}
+
+.hdr__in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 76px;
+}
+
+.brand { display: flex; align-items: center; gap: 0.75rem; }
+
+.brand__mark { width: 30px; height: auto; flex: none; }
+
+.brand__name {
+  font-family: var(--display);
+  font-size: 1.0625rem;
+  font-weight: var(--peso-display-m);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.nav { display: flex; align-items: center; gap: 2rem; }
+
+.nav a {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--body);
+  position: relative;
+  padding-block: 0.4rem;
+}
+
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s ease;
+}
+
+.nav a:hover { color: var(--ink); }
+.nav a:hover::after { transform: scaleX(1); }
+
+.hdr__cta { display: flex; align-items: center; gap: 1rem; }
+
+.hdr .btn { padding: 0.68rem 1.3rem; font-size: 0.875rem; }
+
+.burger {
+  display: none;
+  width: 42px; height: 42px;
+  align-items: center; justify-content: center;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+/* --------------------------------------------------------------------------
+   7. HERO
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  padding-block: clamp(3.5rem, 7vw, 6.5rem) clamp(4rem, 8vw, 7rem);
+  overflow: hidden;
+}
+
+/* Luz fria e discreta — substitui os orbes neon do site antigo */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -20% 40% 30% -25%;
+  background: radial-gradient(closest-side, var(--royal-wash), transparent);
+  opacity: .85;
+  pointer-events: none;
+}
+
+/* Mais coluna para o texto do que o layout antigo dava: o cartão do curso é
+   mais estreito que a capa do livro que ocupava este lugar antes. */
+.hero__grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.28fr 0.72fr;
+  gap: clamp(2.5rem, 5vw, 4.5rem);
+  align-items: center;
+}
+
+.hero__copy { display: flex; flex-direction: column; gap: 1.6rem; }
+
+.hero h1 {
+  font-weight: var(--peso-display);
+  letter-spacing: -0.02em;
+}
+
+/* A frase-chave do livro em itálico do Bodoni — o momento tipográfico da página */
+.hero h1 em {
+  font-style: italic;
+  color: var(--royal);
+}
+
+.hero__note {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+.hero__note strong { color: var(--ink); font-weight: 600; }
+
+/* ---- Cartão do curso (protagonista da primeira dobra) ---- */
+.curso-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: var(--lift-3);
+  max-width: 390px;
+  margin-inline: auto;
+  transition: transform .5s cubic-bezier(.2,.8,.2,1);
+}
+
+.curso-card:hover { transform: translateY(-5px); }
+
+.curso-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+  z-index: 2;
+}
+
+.curso-card__img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: center 32%;
+  display: block;
+}
+
+.curso-card__corpo {
+  padding: clamp(1.4rem, 2.6vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.curso-card__marca {
+  font-family: var(--display);
+  font-size: clamp(1.65rem, 2.6vw, 2.05rem);
+  font-weight: var(--peso-display);
+  line-height: 1.05;
+  color: var(--ink);
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' var(--display-opsz);
+}
+
+.curso-card__sub {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  margin-top: -0.5rem;
+}
+
+.curso-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-block: 0.9rem;
+  border-block: 1px solid var(--line-soft);
+  font-size: var(--fs-small);
+  color: var(--body);
+}
+
+.curso-card__meta li { display: flex; align-items: baseline; gap: 0.6rem; }
+
+.curso-card__meta span {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  font-weight: var(--peso-display-m);
+  color: var(--gold);
+  min-width: 1.2em;
+  font-variant-numeric: tabular-nums;
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' var(--display-opsz);
+}
+
+.curso-card__preco { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; }
+
+.curso-card__de {
+  font-size: 0.9rem;
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  font-variant-numeric: tabular-nums;
+}
+
+.curso-card__por {
+  font-family: var(--display);
+  font-size: clamp(2rem, 3.2vw, 2.5rem);
+  font-weight: var(--peso-display);
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' var(--display-opsz);
+}
+
+/* Placa do livro */
+.plate {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+.plate__img {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 2px;
+  box-shadow: var(--lift-3);
+  transform: rotate(-1.2deg);
+  transition: transform .6s cubic-bezier(.2,.8,.2,1);
+}
+
+.plate:hover .plate__img { transform: rotate(0deg) translateY(-6px); }
+
+.plate__cap {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  text-align: center;
+  letter-spacing: 0.02em;
+  max-width: 34ch;
+}
+
+.plate__cap b {
+  display: block;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+  font-weight: var(--peso-display-m);
+  margin-bottom: 0.15rem;
+}
+
+/* --------------------------------------------------------------------------
+   8. FAIXA DE FATOS  (dados verificáveis, sem número inventado)
+   -------------------------------------------------------------------------- */
+.facts {
+  border-block: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.facts__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.fact {
+  padding: clamp(1.75rem, 3vw, 2.6rem) clamp(1rem, 2vw, 1.75rem);
+  border-left: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.fact:first-child { border-left: 0; }
+
+.fact__n {
+  font-family: var(--display);
+  font-size: clamp(2rem, 3.4vw, 2.9rem);
+  color: var(--ink);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--peso-display-m);
+}
+
+.fact__n sup {
+  font-size: 0.42em;
+  color: var(--gold);
+  top: -1.1em;
+  margin-left: 0.12em;
+}
+
+.fact__k {
+  font-size: 0.875rem;
+  color: var(--body);
+  line-height: 1.45;
+}
+
+.fact__k span { display: block; color: var(--muted); font-size: 0.8125rem; }
+
+/* --------------------------------------------------------------------------
+   9. BLOCO DE TEXTO + IMAGEM (o problema)
+   -------------------------------------------------------------------------- */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2.5rem, 6vw, 5.5rem);
+  align-items: center;
+}
+
+.split--wide-left { grid-template-columns: 1.15fr 0.85fr; }
+.split--wide-right { grid-template-columns: 0.85fr 1.15fr; }
+
+/* Prancha de aquarela — arte original do livro */
+.wc {
+  position: relative;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--lift-2);
+}
+
+.wc img { width: 100%; }
+
+.wc::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-soft) 60%, transparent);
+}
+
+/* Dores reais — vindas do onboarding do cliente */
+.chips { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+
+.chip {
+  font-size: 0.875rem;
+  color: var(--body);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  line-height: 1.3;
+}
+
+/* --------------------------------------------------------------------------
+   10. PILARES
+   -------------------------------------------------------------------------- */
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.pillar {
+  background: var(--surface);
+  padding: clamp(2rem, 3.4vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: background .35s ease;
+}
+
+.pillar:hover { background: var(--gold-wash); }
+
+.pillar__t {
+  font-family: var(--display);
+  /* 1.4 e não 1.5: no peso 600 a frase "Você não está quebrado." estourava
+     a coluna e quebrava em "Você não / está quebrado". */
+  font-size: 1.4rem;
+  line-height: 1.2;
+  color: var(--ink);
+  font-weight: var(--peso-display-m);
+}
+
+.pillar__s { font-size: var(--fs-small); color: var(--body); }
+
+.pillar__q {
+  font-size: 0.875rem;
+  color: var(--muted);
+  font-style: italic;
+  border-left: 1px solid var(--gold-soft);
+  padding-left: 0.9rem;
+  margin-top: auto;
+  line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   11. A JORNADA — "o elo"
+   O fio dourado nasce partido e se fecha na última fase. Isso não é
+   ornamento: é o argumento do livro ("O Elo Perdido") em forma de layout.
+   -------------------------------------------------------------------------- */
+.journey { position: relative; }
+
+.phases {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 3.25rem);
+  padding-left: 4.25rem;
+}
+
+/* trilho de fundo */
+.phases::before {
+  content: "";
+  position: absolute;
+  left: 1.25rem;
+  top: 0.6rem;
+  bottom: 0.6rem;
+  width: 1px;
+  /* tracejado no início → contínuo no fim: o elo se refazendo */
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      var(--gold-soft) 0 6px,
+      transparent 6px 14px
+    );
+  mask-image: linear-gradient(to bottom, #000 0 55%, transparent 55% 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0 55%, transparent 55% 100%);
+}
+
+.phases::after {
+  content: "";
+  position: absolute;
+  left: 1.25rem;
+  top: 0.6rem;
+  bottom: 0.6rem;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent 0 52%, var(--gold) 62%, var(--gold));
+}
+
+.phase { position: relative; display: flex; flex-direction: column; gap: 0.55rem; }
+
+.phase__dot {
+  position: absolute;
+  left: -3.4rem;
+  top: 0.15rem;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--gold-soft);
+  transition: background .35s ease, border-color .35s ease, transform .35s ease;
+}
+
+.phase:last-child .phase__dot {
+  background: var(--gold);
+  border-color: var(--gold);
+  transform: scale(1.15);
+}
+
+.phase__n {
+  font-family: var(--sans);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.phase__t {
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  color: var(--ink);
+  line-height: 1.1;
+  font-weight: var(--peso-display-m);
+}
+
+.phase__t span { color: var(--muted); font-size: 0.55em; letter-spacing: 0.02em; }
+
+.phase__q { font-size: var(--fs-small); color: var(--body); max-width: 46ch; }
+
+/* --------------------------------------------------------------------------
+   12. OS LIVROS
+   -------------------------------------------------------------------------- */
+.books {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.25rem, 2.4vw, 2rem);
+  align-items: start;
+}
+
+.book {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: clamp(1.5rem, 2.4vw, 2.15rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  height: 100%;
+  transition: border-color .3s ease, box-shadow .35s ease, transform .35s ease;
+}
+
+.book:hover {
+  border-color: var(--gold-soft);
+  box-shadow: var(--lift-2);
+  transform: translateY(-4px);
+}
+
+.book--lead {
+  border-color: var(--gold-soft);
+  box-shadow: var(--lift-2);
+}
+
+.book__flag {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+}
+
+.book__cover {
+  align-self: center;
+  width: 100%;
+  max-width: 220px;
+  border-radius: 1px;
+  box-shadow: var(--lift-2);
+  transition: transform .45s cubic-bezier(.2,.8,.2,1);
+}
+
+.book:hover .book__cover { transform: translateY(-5px) scale(1.02); }
+
+.book__kind {
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.book__t {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  line-height: 1.15;
+  color: var(--ink);
+  font-weight: var(--peso-display-m);
+}
+
+.book__d { font-size: var(--fs-small); color: var(--body); }
+
+.book__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line-soft);
+  font-size: 0.875rem;
+  color: var(--body);
+}
+
+.book__meta li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  line-height: 1.5;
+}
+
+.book__meta svg { flex: none; margin-top: 0.32em; color: var(--gold); }
+
+.book__foot { margin-top: auto; padding-top: 1.25rem; display: flex; flex-direction: column; gap: 0.9rem; }
+
+/* Onde a obra está inclusa — os livros não têm venda avulsa */
+.book__onde {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  line-height: 1.4;
+}
+
+.book__onde svg { flex: none; }
+
+.book__price {
+  font-family: var(--display);
+  font-size: 1.9rem;
+  color: var(--ink);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--peso-display);
+}
+
+.book__price small {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+/* Cartão "em breve" — sem capa, apenas promessa */
+.book--soon { background: var(--gold-wash); border-style: dashed; }
+.book--soon .book__t { color: var(--navy); }
+
+/* --------------------------------------------------------------------------
+   12b. MÓDULOS DO CURSO
+   Numerados porque é sequência real: são os 9 módulos na ordem em que o
+   treinamento é entregue.
+   -------------------------------------------------------------------------- */
+.modulos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.modulo {
+  background: var(--surface);
+  padding: clamp(1.4rem, 2.4vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: background .35s ease;
+}
+
+.modulo:hover { background: var(--gold-wash); }
+
+.modulo__n {
+  font-family: var(--display);
+  font-size: 0.8125rem;
+  font-weight: var(--peso-display-m);
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.modulo__t {
+  font-family: var(--display);
+  font-size: 1.2rem;
+  line-height: 1.2;
+  color: var(--ink);
+  font-weight: var(--peso-display-m);
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' var(--display-opsz);
+}
+
+/* --------------------------------------------------------------------------
+   12c. PLANOS — as duas ofertas
+   -------------------------------------------------------------------------- */
+/* O curso é o produto principal. A hierarquia entre as duas ofertas é
+   explícita: o Combo VIP ocupa mais coluna, tem borda dourada e sombra;
+   o livro avulso é a porta lateral, discreta.
+   Sem align-items:start — os dois cartões terminam na mesma linha. */
+.planos {
+  display: grid;
+  grid-template-columns: 1.32fr 0.68fr;
+  gap: clamp(1.25rem, 2.4vw, 2rem);
+}
+
+
+.plano {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: clamp(1.75rem, 3vw, 2.75rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+  height: 100%;
+  transition: border-color .3s ease, box-shadow .35s ease, transform .35s ease;
+}
+
+.plano:hover {
+  border-color: var(--gold-soft);
+  box-shadow: var(--lift-2);
+  transform: translateY(-3px);
+}
+
+.plano--destaque {
+  border-color: var(--gold-soft);
+  box-shadow: var(--lift-2);
+}
+
+.plano--destaque::before {
+  content: "";
+  position: absolute;
+  top: -1px; left: -1px; right: -1px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+}
+
+.plano__badge {
+  align-self: flex-start;
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: var(--royal-wash);
+  color: var(--royal);
+  border: 1px solid color-mix(in srgb, var(--royal) 22%, transparent);
+}
+
+.plano--destaque .plano__badge {
+  background: var(--gold-wash);
+  color: var(--gold);
+  border-color: var(--gold-soft);
+}
+
+.plano__t {
+  font-family: var(--display);
+  font-size: clamp(1.75rem, 2.8vw, 2.25rem);
+  line-height: 1.1;
+  color: var(--ink);
+  font-weight: var(--peso-display);
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' var(--display-opsz);
+}
+
+.plano__sub {
+  font-size: var(--fs-small);
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+.plano__preco {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.6rem 0.85rem;
+  padding-block: 0.35rem;
+}
+
+.plano__de {
+  font-size: 1rem;
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  font-variant-numeric: tabular-nums;
+}
+
+.plano__por {
+  font-family: var(--display);
+  font-size: clamp(2.5rem, 4.2vw, 3.4rem);
+  line-height: 1;
+  color: var(--ink);
+  font-weight: var(--peso-display);
+  font-variant-numeric: tabular-nums;
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' var(--display-opsz);
+}
+
+.plano__por small {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+.plano__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid var(--line-soft);
+  font-size: var(--fs-small);
+  color: var(--body);
+}
+
+.plano__lista li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  line-height: 1.5;
+}
+
+.plano__lista svg { flex: none; margin-top: 0.3em; color: var(--gold); }
+
+/* item que é ausência de recurso, não benefício */
+.plano__lista li.nao { color: var(--muted); }
+.plano__lista li.nao svg { color: var(--muted); opacity: .7; }
+
+.plano__foot { margin-top: auto; padding-top: 1.5rem; display: flex; flex-direction: column; gap: 0.85rem; }
+
+.plano__nota {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.plano__nota svg { color: var(--gold); flex: none; }
+
+/* A oferta secundária, declarada DEPOIS de .plano para vencer o fundo branco.
+   Cartão "fantasma": sem preenchimento e sem sombra, para o Combo VIP ficar
+   sendo o único que se apresenta como produto principal. */
+.plano--secundario {
+  background: transparent;
+  box-shadow: none;
+}
+
+.plano--secundario:hover {
+  background: var(--surface);
+  box-shadow: var(--lift-1);
+}
+
+.plano--secundario .plano__t { font-size: clamp(1.4rem, 2.1vw, 1.7rem); }
+.plano--secundario .plano__por { font-size: clamp(1.9rem, 3vw, 2.4rem); }
+
+/* --------------------------------------------------------------------------
+   13. AUTOR
+   -------------------------------------------------------------------------- */
+.author { background: var(--navy); color: #DCE6F5; }
+
+.author h2, .author .author__q { color: #fff; }
+
+.author .label { color: var(--gold-soft); }
+
+.author__grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: center;
+}
+
+.author__ph { position: relative; }
+
+.author__ph img {
+  width: 100%;
+  border-radius: 2px;
+  box-shadow: var(--lift-3);
+}
+
+.author__ph::after {
+  content: "";
+  position: absolute;
+  inset: auto -14px -14px auto;
+  width: 62%;
+  height: 62%;
+  border: 1px solid rgba(216,199,156,.45);
+  border-radius: 2px;
+  z-index: -1;
+}
+
+.author__q {
+  font-family: var(--display);
+  font-size: clamp(1.4rem, 2.5vw, 1.95rem);
+  line-height: 1.32;
+  font-style: italic;
+  /* Um passo abaixo dos títulos: texto claro sobre marinho já "engorda"
+     opticamente, e o itálico da Bodoni fecha os contraformas se pesar demais. */
+  font-weight: var(--peso-display-m);
+}
+
+.author p { color: #C2D2E8; }
+
+.author__sig {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: var(--peso-display-m);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+
+/* --------------------------------------------------------------------------
+   14. TRECHOS (galeria de aquarelas + citações reais do livro)
+   -------------------------------------------------------------------------- */
+.quotes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.quote { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.quote__img {
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--lift-1);
+  aspect-ratio: 3 / 4;
+}
+
+.quote__img img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+
+.quote blockquote {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.3rem;
+  line-height: 1.4;
+  color: var(--ink);
+  font-weight: var(--peso-display-m);
+}
+
+.quote cite {
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  font-style: normal;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+/* --------------------------------------------------------------------------
+   15. CTA FINAL
+   -------------------------------------------------------------------------- */
+.close {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+
+.close__in {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: center;
+}
+
+.close__card {
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: clamp(1.75rem, 3vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: var(--fs-small);
+  color: var(--body);
+}
+
+.contact-row svg { color: var(--gold); flex: none; }
+.contact-row a { font-weight: 600; }
+
+/* --------------------------------------------------------------------------
+   16. RODAPÉ
+   -------------------------------------------------------------------------- */
+.ftr {
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+  padding-block: clamp(3rem, 5vw, 4.5rem) 2rem;
+}
+
+.ftr__grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap: clamp(2rem, 4vw, 3.5rem);
+}
+
+.ftr h4 {
+  font-family: var(--sans);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.ftr__links { display: flex; flex-direction: column; gap: 0.65rem; }
+
+.ftr__links a { font-size: var(--fs-small); color: var(--body); }
+.ftr__links a:hover { color: var(--royal); }
+
+.ftr__bottom {
+  margin-top: clamp(2.5rem, 4vw, 3.5rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+/* --------------------------------------------------------------------------
+   17. MOVIMENTO — uma entrada orquestrada, revelações discretas depois
+   -------------------------------------------------------------------------- */
+/* O conteúdo é visível por padrão. Só escondemos para animar quando o
+   JavaScript confirma que está rodando (classe .js no <html>). Se o script
+   falhar, quebrar ou for bloqueado, a página continua legível — nada de
+   seções em branco. */
+:root.js .rise {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1);
+}
+
+:root.js .rise.is-in { opacity: 1; transform: none; }
+
+:root.js .rise[data-d="1"] { transition-delay: .08s; }
+:root.js .rise[data-d="2"] { transition-delay: .16s; }
+:root.js .rise[data-d="3"] { transition-delay: .24s; }
+:root.js .rise[data-d="4"] { transition-delay: .32s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+  }
+  :root.js .rise { opacity: 1; transform: none; }
+}
+
+/* --------------------------------------------------------------------------
+   18. RESPONSIVO
+   -------------------------------------------------------------------------- */
+@media (max-width: 1000px) {
+  .hero__grid,
+  .split, .split--wide-left, .split--wide-right,
+  .author__grid, .close__in {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__grid { gap: 3rem; }
+  .plate { order: -1; }
+  .plate__img { max-width: 300px; }
+  .curso-card { max-width: 460px; }
+
+  .books, .pillars, .quotes, .modulos { grid-template-columns: 1fr 1fr; }
+  .planos { grid-template-columns: 1fr; }
+  .facts__grid { grid-template-columns: 1fr 1fr; }
+  .fact:nth-child(3) { border-left: 0; }
+  .fact:nth-child(n+3) { border-top: 1px solid var(--line-soft); }
+
+  .ftr__grid { grid-template-columns: 1fr 1fr; }
+  .author__grid { gap: 2.5rem; }
+  .author__ph { max-width: 340px; }
+
+  .nav { display: none; }
+  .burger { display: inline-flex; }
+  .hdr__cta .btn { display: none; }
+
+  /* menu móvel */
+  .nav.is-open {
+    display: flex;
+    position: absolute;
+    inset: 100% 0 auto 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    background: var(--surface);
+    border-block: 1px solid var(--line);
+    padding: 0.5rem var(--pad-x) 1.25rem;
+    box-shadow: var(--lift-2);
+  }
+
+  .nav.is-open a {
+    width: 100%;
+    padding-block: 0.85rem;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 1rem;
+  }
+
+  .nav.is-open a::after { display: none; }
+}
+
+@media (max-width: 680px) {
+  .books, .pillars, .quotes, .facts__grid, .ftr__grid, .modulos, .planos {
+    grid-template-columns: 1fr;
+  }
+
+  .modulos { border: 0; }
+
+  .fact { border-left: 0; border-top: 1px solid var(--line-soft); }
+  .fact:first-child { border-top: 0; }
+
+  .pillars { border: 0; gap: 1px; }
+
+  .phases { padding-left: 3.25rem; }
+  .phase__dot { left: -2.7rem; }
+  .phases::before, .phases::after { left: 0.75rem; }
+
+  .btn { width: 100%; }
+  .btn-row { flex-direction: column; }
+  .hdr__cta .btn { width: auto; }
+}

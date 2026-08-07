@@ -1,0 +1,13 @@
+# Material pesado — não vai para o repositório nem para o deploy.
+# Fica só na máquina, como arquivo de origem.
+material-original/
+assets-extras/
+capas-ebooks-png/
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Vercel
+.vercel
