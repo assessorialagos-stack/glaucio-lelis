@@ -1350,6 +1350,21 @@ p { margin: 0; }
   color: var(--muted);
 }
 
+/* Crédito de autoria: discreto como o resto da linha, mas legível como link.
+   O sublinhado fraco sinaliza que é clicável sem competir com o copyright. */
+.ftr__bottom a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.ftr__bottom a:hover {
+  color: var(--royal);
+  text-decoration-color: currentColor;
+}
+
 /* --------------------------------------------------------------------------
    17. MOVIMENTO — uma entrada orquestrada, revelações discretas depois
    -------------------------------------------------------------------------- */
